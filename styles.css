@@ -1,0 +1,70 @@
+h1 {
+    font-family: 'Lora', serif;
+}
+
+.word-box {
+    align-self: center;
+    height: 3rem;
+    width: 3rem;
+    border: 2px solid grey;
+}
+
+.clicked {
+    border: 3px solid black;
+    animation: zoom-in-zoom-out 0.5s ease-out;
+
+}
+
+.unclicked {
+    border: 2px solid grey;
+}
+
+.no-word {
+    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+    transform: translate3d(0, 0, 0);
+}
+
+button {
+    height: 50px;
+    width: auto;
+    margin: 1px 2px 1px 2px;
+    background-color: #383838 !important;
+    color: whitesmoke !important;
+
+}
+
+button:active {
+    background-color: #DFDFDE !important;
+    transform: translateY(-3px);
+}
+
+
+@keyframes zoom-in-zoom-out {
+    0% {
+        transform: scale(1, 1);
+    }
+    50% {
+        transform: scale(1.09, 1.09);
+    }
+    100% {
+        transform: scale(1, 1);
+    }
+}
+
+@keyframes shake {
+    10%, 90% {
+      transform: translate3d(-1px, 0, 0);
+    }
+    
+    20%, 80% {
+      transform: translate3d(2px, 0, 0);
+    }
+  
+    30%, 50%, 70% {
+      transform: translate3d(-4px, 0, 0);
+    }
+  
+    40%, 60% {
+      transform: translate3d(4px, 0, 0);
+    }
+}
