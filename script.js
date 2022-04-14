@@ -71,7 +71,7 @@ $(".enter-key").click(function() {
 
         for (let i = 0; i < 5; i++) {
             // Append Letters to guessedWord
-            answer += createdWord.slice(wordRow, letterLimit+1)[i];  
+            answer += createdWord.slice(wordRow, letterLimit+1)[i]; 
         }
         checkAnswer(answer);            
     }
@@ -82,7 +82,7 @@ $(".enter-key").click(function() {
 function addLetter (letter) {
 
     if (letterLimit > createdWord.length) {
-        letterBox = $("<h4></h4>").text(letter);
+        letterBox = $("<h3></h3>").text(letter);
         $(".word-box")[letterCount].append(letterBox[0]);
 
         letterCount++;
@@ -97,7 +97,7 @@ function addLetter (letter) {
 function removeLetter () {
     if (wordRow < letterCount) {            
         let wordBox = $(".word-box")[letterCount-1];
-        $(wordBox).find("h4").remove()
+        $(wordBox).find("h3").remove()
         $(wordBox).removeClass("clicked");
         $(wordBox).addClass("unclicked")
 
@@ -117,47 +117,54 @@ function checkAnswer (guessedWord) {
                 // Check if Letter in Right Place
                 if (secretWord[i] == createdWord.slice(wordRow, letterLimit+1)[i]) {
                     let wordBox = $(".word-box")[i + wordRow];
-                    $(wordBox).addClass("bg-success");
-                    changeColor(createdWord.slice(wordRow, letterLimit+1)[i], "green");
+                    setTimeout(function() {
+                        $(wordBox).addClass("flip bg-success");
+                        changeColor(createdWord.slice(wordRow, letterLimit+1)[i], "green");
+                    
+                    }, 300);
 
                 } else {
                     let wordBox = $(".word-box")[i + wordRow ];
-                    $(wordBox).addClass("bg-warning");
+                    setTimeout(function() {$(wordBox).addClass("flip bg-warning");
                     changeColor(createdWord.slice(wordRow, letterLimit+1)[i], "yellow");
+                
+                    }, 300);
+                }
 
-
-                }    
             } else {
                 let wordBox = $(".word-box")[i + wordRow];
-                $(wordBox).addClass("bg-secondary");
+                setTimeout(function() {$(wordBox).addClass("flip bg-secondary")
                 changeColor(createdWord.slice(wordRow, letterLimit+1)[i], "g");
-
-
+                }, 300);
             }
         }
 
         let currentRow = ($(".word-box").slice(wordRow, letterLimit));
         let score = 0    
-        for (i = 0; i < currentRow.length; i++) {
-            let wordBox = currentRow[i];
-            if ($(wordBox).hasClass("bg-success")) {
-                score++;
-            }
-        }                
-        if (score == 5) {
-            $("h1").text('Congratulations!');
-            backSpace = "";
 
-
-        } else {
-            letterLimit += 5;
-            wordRow += 5;
-            
-            if (wordRow == 30) {
-                $("h1").text(secretWord);
+        setTimeout(function() {
+            for (i = 0; i < currentRow.length; i++) {
+                let wordBox = currentRow[i];
+                if ($(wordBox).hasClass("bg-success")) {
+                    score++;
+                }   
             }
 
-        }             
+            if (score == 5) {
+                $("h1").text('Congratulations!');
+                backSpace = "";
+                
+            } else {
+                letterLimit += 5;
+                wordRow += 5;
+                
+                if (wordRow == 30) {
+                    $("h1").text(secretWord);
+                }
+    
+            } 
+        }, 600);
+                                
     } else {
         let wordContainer = $(".word-container")[wordRow / 5];
         $(wordContainer).addClass("no-word")
@@ -170,24 +177,49 @@ function changeColor(letter, color) {
         let btnLetter = $(".letter-key")[i];
 
         if ($(btnLetter).text() == letter) {
-            console.log($(btnLetter).text(), letter);
-
-
             if (color == "green") {
-                $(btnLetter).removeClass("bg-warning");
-                $(btnLetter).addClass("bg-success");
+                setTimeout(function() {
+                    $(btnLetter).removeClass("bg-warning");
+                    $(btnLetter).addClass("bg-success");                
+                }, 500);
     
             } else if (color == "yellow") {
-                if ($(btnLetter).hasClass("bg-success")) {
+                setTimeout(function() {
+                    if ($(btnLetter).hasClass("bg-success")) {
 
-                } else {
-                    $(btnLetter).addClass("bg-warning");
-                }
+                    } else {
+                        $(btnLetter).addClass("bg-warning");
+                    }
+                                    
+                }, 500);
     
             } else {
-                $(btnLetter).addClass("bg-secondary");
+                setTimeout(function() {
+                    $(btnLetter).addClass("bg-secondary");
+                }, 500);
             }
         }
     }
 }
+
+function restart() {
+    letterCount = 0;
+    createdWord = [];
+    wordRow = 0;
+    letterLimit = 5;
+    backSpace = 'BACKSPACE'
+
+    $(".letter-key").removeClass("bg-secondary bg-warning bg-success");
+    $(".backspace-key").removeClass("bg-secondary bg-warning bg-success");
+    $(".enter-key").removeClass("bg-secondary bg-warning bg-success");
+    $(".word-box").removeClass("bg-secondary bg-warning bg-success clicked unclicked flip");
+    $("h3").remove();
+    $("h1").text("IDLE");
+
+    secretWord = secretList[Math.floor(Math.random() * secretList.length)].toUpperCase();
+}
+
+$(".restart-btn").click(function() {
+    restart();
+})
 
